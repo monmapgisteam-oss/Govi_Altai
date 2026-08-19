@@ -1,0 +1,29 @@
+{
+  "name": "govi-altai-atlas",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "data": "node scripts/build-data.mjs",
+    "verify": "node scripts/verify.mjs",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@arcgis/core": "^5.1.17",
+    "clsx": "^2.1.1",
+    "next": "^15.5.23",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "recharts": "^2.15.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2"
+  }
+}

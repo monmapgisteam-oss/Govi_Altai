@@ -1,0 +1,152 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink-950: #070a0e;
+  --color-ink-900: #0b1016;
+  --color-ink-850: #0f161e;
+  --color-ink-800: #141d27;
+  --color-ink-700: #1b2632;
+  --color-ink-600: #26333f;
+  --color-ink-400: #64748b;
+  --color-ink-300: #8b9aa9;
+  --color-ink-200: #b9c6d3;
+  --color-ink-100: #e6edf4;
+
+  --color-sand-500: #e0a33c;
+  --color-sand-400: #eab765;
+  --color-sand-600: #c2861f;
+  --color-teal-500: #46c9b4;
+  --color-teal-600: #2ba894;
+
+  --color-grade-1: #10b981;
+  --color-grade-2: #84cc16;
+  --color-grade-3: #eab308;
+  --color-grade-4: #f97316;
+  --color-grade-5: #e5484d;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, 'Segoe UI', sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: var(--color-ink-950);
+  color: var(--color-ink-100);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-image:
+    radial-gradient(900px 500px at 12% -8%, rgba(224, 163, 60, 0.09), transparent 65%),
+    radial-gradient(760px 460px at 92% 4%, rgba(70, 201, 180, 0.07), transparent 60%);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: rgba(224, 163, 60, 0.28);
+}
+
+/* --- scrollbars ---------------------------------------------------------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ink-700) transparent;
+}
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-ink-700);
+  border-radius: 99px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-600);
+}
+
+/* --- shared surface primitives ------------------------------------------- */
+@utility panel {
+  background: color-mix(in oklab, var(--color-ink-900) 88%, transparent);
+  border: 1px solid var(--color-ink-700);
+  border-radius: 14px;
+  backdrop-filter: blur(6px);
+}
+
+@utility panel-hd {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px 10px;
+}
+
+@utility num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* --- arcgis map view chrome ------------------------------------------------ */
+.esri-view,
+.esri-view-surface {
+  background: var(--color-ink-950) !important;
+}
+.esri-view-surface:focus::after { outline: none !important; }
+.esri-attribution {
+  background: rgba(230, 237, 244, 0.62) !important;
+  color: #4b5765 !important;
+  font-size: 10px !important;
+}
+.esri-attribution a { color: #3f4a56 !important; }
+/* the scale bar rides on bright imagery, so it takes the light treatment too */
+.esri-scale-bar__label { color: #26333f !important; }
+.esri-scale-bar__line { border-color: #26333f !important; }
+.esri-scale-bar__bar-container { background: rgba(230, 237, 244, 0.62) !important; border-radius: 4px; padding: 1px 3px; }
+.esri-widget--button {
+  background: rgba(230, 237, 244, 0.72) !important;
+  color: #26333f !important;
+  border: 1px solid rgba(100, 116, 139, 0.35) !important;
+  backdrop-filter: blur(6px);
+}
+.esri-widget--button:hover { background: rgba(230, 237, 244, 0.95) !important; color: #070a0e !important; }
+.esri-popup__main-container {
+  background: #0f161e !important;
+  border: 1px solid #26333f !important;
+  border-radius: 12px !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55) !important;
+}
+.esri-popup__header-title { font-size: 13px !important; font-weight: 600 !important; color: #e6edf4 !important; }
+.esri-popup__content, .esri-feature__field-data, .esri-feature__field-header { font-size: 11.5px !important; }
+.esri-feature__field-header { color: #8b9aa9 !important; }
+.esri-feature__field-data { color: #e6edf4 !important; font-variant-numeric: tabular-nums; }
+.esri-popup__pointer-direction { background: #0f161e !important; }
+
+/* --- recharts ------------------------------------------------------------- */
+.recharts-cartesian-axis-tick text {
+  fill: #64748b;
+  font-size: 11px;
+}
+.recharts-cartesian-grid line {
+  stroke: #16202a;
+}
+.recharts-default-legend {
+  font-size: 12px !important;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
