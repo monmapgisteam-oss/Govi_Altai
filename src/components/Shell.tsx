@@ -36,25 +36,39 @@ const RoadIcon = svg(
     <path d="M12 4v3M12 10.5v3M12 17v3" />
   </>,
 );
-const TableIcon = svg(
+const HealthIcon = svg(
   <>
-    <rect x="3" y="4" width="18" height="16" rx="2" />
-    <path d="M3 9.5h18M3 15h18M9 4v16" />
+    <path d="M12 4.5v15M4.5 12h15" />
+    <rect x="3" y="3" width="18" height="18" rx="4" />
+  </>,
+);
+const PeopleIcon = svg(
+  <>
+    <circle cx="9" cy="8" r="3" />
+    <path d="M3.5 19c0-3 2.5-4.8 5.5-4.8s5.5 1.8 5.5 4.8" />
+    <path d="M16 5.6a3 3 0 0 1 0 5.3M17.5 14.6c1.9.6 3.2 2.1 3.2 4.4" />
   </>,
 );
 
 const RAIL_KEY = 'ga-sidebar-rail';
 
 /**
- * The nav. The three sub-boards stay routable by URL but are kept out of the
- * menu — flip `hidden` to false to bring one back.
+ * The overview board is the parent; each child takes one family of the header
+ * metrics and gives it a map and charts of its own.
  */
 const NAV = [
-  { href: '/', label: 'Ерөнхий самбар', icon: GridIcon, hidden: false },
-  { href: '/education', label: 'Боловсролын хүртээмж', icon: SchoolIcon, hidden: true },
-  { href: '/roads', label: 'Замын хүртээмж', icon: RoadIcon, hidden: true },
-  { href: '/soums', label: 'Сумын харьцуулалт', icon: TableIcon, hidden: true },
-].filter((x) => !x.hidden);
+  {
+    href: '/',
+    label: 'Ерөнхий самбар',
+    icon: GridIcon,
+    children: [
+      { href: '/education', label: 'Боловсрол', icon: SchoolIcon },
+      { href: '/health', label: 'Эрүүл мэнд', icon: HealthIcon },
+      { href: '/roads', label: 'Авто зам', icon: RoadIcon },
+      { href: '/population', label: 'Хүн ам, суурьшил', icon: PeopleIcon },
+    ],
+  },
+];
 
 export default function Shell({
   children,
@@ -124,34 +138,64 @@ export default function Shell({
 
         <nav className={clsx('flex-1 space-y-1 overflow-y-auto py-3', rail ? 'px-2' : 'px-3')}>
           {NAV.map((item) => {
-            const active = item.href === '/' ? path === '/' : path.startsWith(item.href);
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                title={item.label}
-                className={clsx(
-                  'group flex items-center gap-3 rounded-xl py-2.5 transition',
-                  rail ? 'justify-center px-2' : 'px-3',
-                  active
-                    ? 'bg-sand-500/12 text-ink-100 ring-1 ring-sand-500/25'
-                    : 'text-ink-300 hover:bg-ink-800/60 hover:text-ink-100',
-                )}
-              >
-                <Icon
+            const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+            const link = (
+              entry: { href: string; label: string; icon: typeof GridIcon },
+              child: boolean,
+            ) => {
+              const active = isActive(entry.href);
+              const Icon = entry.icon;
+              return (
+                <Link
+                  key={entry.href}
+                  href={entry.href}
+                  onClick={() => setOpen(false)}
+                  title={entry.label}
                   className={clsx(
-                    'size-4 shrink-0 transition',
-                    active ? 'text-sand-500' : 'text-ink-400 group-hover:text-ink-200',
+                    'group flex items-center gap-3 rounded-xl transition',
+                    child ? 'py-2' : 'py-2.5',
+                    rail ? 'justify-center px-2' : child ? 'pl-4 pr-3' : 'px-3',
+                    active
+                      ? 'bg-sand-500/12 text-ink-100 ring-1 ring-sand-500/25'
+                      : 'text-ink-300 hover:bg-ink-800/60 hover:text-ink-100',
                   )}
-                />
-                {!rail && (
-                  <span className="min-w-0 truncate text-[13px] font-medium leading-tight">
-                    {item.label}
-                  </span>
+                >
+                  <Icon
+                    className={clsx(
+                      'shrink-0 transition',
+                      child ? 'size-[15px]' : 'size-4',
+                      active ? 'text-sand-500' : 'text-ink-400 group-hover:text-ink-200',
+                    )}
+                  />
+                  {!rail && (
+                    <span
+                      className={clsx(
+                        'min-w-0 truncate leading-tight',
+                        child ? 'text-[12px]' : 'text-[13px] font-medium',
+                      )}
+                    >
+                      {entry.label}
+                    </span>
+                  )}
+                </Link>
+              );
+            };
+
+            return (
+              <div key={item.href} className="space-y-1">
+                {link(item, false)}
+                {item.children && (
+                  <div
+                    className={clsx(
+                      'space-y-1',
+                      // the rail has no room for a rule, so the children just stack
+                      !rail && 'ml-[19px] border-l border-ink-700/70 pl-1',
+                    )}
+                  >
+                    {item.children.map((ch) => link(ch, true))}
+                  </div>
                 )}
-              </Link>
+              </div>
             );
           })}
         </nav>

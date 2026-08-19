@@ -326,6 +326,7 @@ export function SoumRadar({
   onSelect,
   showLegend = true,
   selName,
+  names = { social: 'Нийгмийн дэд бүтэц', road: 'Зам' },
   only: onlyProp,
   onOnly,
   height = '100%',
@@ -336,6 +337,8 @@ export function SoumRadar({
   showLegend?: boolean;
   /** label of the header metric; omitted when it duplicates an existing series */
   selName?: string | null;
+  /** what the two base series are called on this board */
+  names?: { social: string; road: string };
   /** isolation lifted out, so both half-wheels filter together */
   only?: string | null;
   onOnly?: (key: string | null) => void;
@@ -398,8 +401,8 @@ export function SoumRadar({
               <Box
                 title={d.name}
                 rows={[
-                  { label: 'Нийгмийн дэд бүтэц', value: n(d.social, 1), color: SERIES.secondary },
-                  { label: 'Зам', value: n(d.road, 1), color: SERIES.primary },
+                  { label: names.social, value: n(d.social, 1), color: SERIES.secondary },
+                  { label: names.road, value: n(d.road, 1), color: SERIES.primary },
                   { label: 'Нэгдсэн', value: n(d.overall, 1), color: gradeColor(d.overall) },
                   ...(selName ? [{ label: selName, value: d.selRaw ?? n(d.sel ?? 0, 1), color: SERIES.muted }] : []),
                 ]}
@@ -408,10 +411,10 @@ export function SoumRadar({
           }}
         />
         {only !== 'road' && only !== 'sel' && (
-          <Radar name="Нийгмийн дэд бүтэц" dataKey="social" stroke={SERIES.secondary} fill={SERIES.secondary} fillOpacity={0.22} strokeWidth={1.6} dot={{ r: 2.8, strokeWidth: 1, stroke: '#070a0e', fill: SERIES.secondary }} />
+          <Radar name={names.social} dataKey="social" stroke={SERIES.secondary} fill={SERIES.secondary} fillOpacity={0.22} strokeWidth={1.6} dot={{ r: 2.8, strokeWidth: 1, stroke: '#070a0e', fill: SERIES.secondary }} />
         )}
         {only !== 'social' && only !== 'sel' && (
-          <Radar name="Зам" dataKey="road" stroke={SERIES.primary} fill={SERIES.primary} fillOpacity={0.16} strokeWidth={1.6} dot={{ r: 2.8, strokeWidth: 1, stroke: '#070a0e', fill: SERIES.primary }} />
+          <Radar name={names.road} dataKey="road" stroke={SERIES.primary} fill={SERIES.primary} fillOpacity={0.16} strokeWidth={1.6} dot={{ r: 2.8, strokeWidth: 1, stroke: '#070a0e', fill: SERIES.primary }} />
         )}
         {selName && only !== 'social' && only !== 'road' && (
           <Radar name={selName} dataKey="sel" stroke={SERIES.muted} fill={SERIES.muted} fillOpacity={0} strokeWidth={1.4} strokeDasharray="4 3" dot={{ r: 2.2, strokeWidth: 1, stroke: '#070a0e', fill: SERIES.muted }} />
@@ -424,8 +427,8 @@ export function SoumRadar({
           only={only}
           onPick={setOnly}
           items={[
-            { key: 'social', name: 'Нийгмийн дэд бүтэц', color: SERIES.secondary },
-            { key: 'road', name: 'Зам', color: SERIES.primary },
+            { key: 'social', name: names.social, color: SERIES.secondary },
+            { key: 'road', name: names.road, color: SERIES.primary },
             ...(selName ? [{ key: 'sel', name: selName, color: SERIES.muted }] : []),
           ]}
         />

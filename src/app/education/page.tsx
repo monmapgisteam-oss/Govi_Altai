@@ -1,9 +1,10 @@
-import EducationExplorer from '@/components/EducationExplorer';
+import ThemeExplorer from '@/components/ThemeExplorer';
 import { getAll } from '@/lib/data';
+import { THEMES } from '@/lib/themes';
 
-export const metadata = { title: 'Боловсролын хүртээмж · Говь-Алтай' };
+export const metadata = { title: THEMES.education.title + ' · Говь-Алтай' };
 
 export default async function EducationPage() {
   const { aimag, soums } = await getAll();
-  return <EducationExplorer aimag={aimag} soums={soums} />;
+  return <ThemeExplorer aimag={aimag} soums={soums} themeKey="education" />;
 }
